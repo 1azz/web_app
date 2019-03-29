@@ -7,7 +7,7 @@
          path: /etc/selinux/config
          regexp: '^SELINUX='
          line: 'SELINUX=disabled'
-# These tasks install http and the php modules.
+
      - name: Install EPEL meta package
        yum:
          name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
@@ -37,13 +37,11 @@
 #         - uwsgi 
          - uwsgi-plugin-python36
         state: present
-#       update_cache: yes
-#       enablerepo: epel
 
      - name: Disable SELinux 
        selinux:
         state: disabled
-        #- command: cp -f /vagrant/selinux/config /etc/selinux/
+
 
 
      - name: Copy nginx config 
@@ -61,8 +59,6 @@
          mode: 01751
          recurse: yes
 
-#     - name: copy nginx config
-#       command: cp  /vagrant/cfg/default.conf  /etc/nginx/conf.d/
      
      - name: Setting NGINX config files attributes
        file:
@@ -103,7 +99,7 @@
          group: nginx
          mode: 0760
          recurse: yes
-#         state: directory
+
      - name: Add user nginx to uwsgi group
        user:
         name: nginx
@@ -121,26 +117,3 @@
        service: name=nginx state=started enabled=yes
      - name: Start and enable uwsgi
        service: name=uwsgi state=started enabled=yes
-     
-
-     
-     
-     
-     #
-     #- name: Install web role specific dependencies
-     #  yum: name={{ item }} state=installed
-     #  with_items:
-     #   - git
-     #
-     #- name: Start firewalld
-     #  service: name=firewalld state=started enabled=yes
-     #
-     #- name: insert firewalld rule for httpd
-     #  firewalld: port=80/tcp permanent=true state=enabled immediate=yes
-     #
-     #- name: http service state
-     #  service: name=httpd state=started enabled=yes
-     #
-     #- name: Configure SELinux to allow httpd to connect to remote database
-     #  seboolean: name=httpd_can_network_connect_db state=true persistent=yes
-       
