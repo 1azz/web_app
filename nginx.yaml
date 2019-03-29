@@ -7,7 +7,7 @@
          path: /etc/selinux/config
          regexp: '^SELINUX='
          line: 'SELINUX=disabled'
-# These tasks install http and the php modules.
+
      - name: Install EPEL meta package
        yum:
          name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
@@ -37,13 +37,12 @@
 #         - uwsgi 
          - uwsgi-plugin-python36
         state: present
-#       update_cache: yes
-#       enablerepo: epel
+
 
      - name: Disable SELinux 
        selinux:
         state: disabled
-        #- command: cp -f /vagrant/selinux/config /etc/selinux/
+
 
 
      - name: Copy nginx config 
@@ -61,8 +60,6 @@
          mode: 01751
          recurse: yes
 
-#     - name: copy nginx config
-#       command: cp  /vagrant/cfg/default.conf  /etc/nginx/conf.d/
      
      - name: Setting NGINX config files attributes
        file:
@@ -88,7 +85,7 @@
          group: uwsgi
          mode: 01770
          recurse: yes
-#         state: directory
+
 
      - file:
          path: /run/uwsgi
@@ -103,7 +100,7 @@
          group: nginx
          mode: 01760
          recurse: yes
-#         state: directory
+
      - name: Add user nginx to uwsgi group
        user:
         name: nginx
