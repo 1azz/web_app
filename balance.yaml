@@ -7,7 +7,7 @@
          path: /etc/selinux/config
          regexp: '^SELINUX='
          line: 'SELINUX=disabled'
-# These tasks install http and the php modules.
+
      - name: Install EPEL meta package
        yum:
          name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
@@ -23,7 +23,7 @@
      - name: Disable SELinux 
        selinux:
         state: disabled
-        #- command: cp -f /vagrant/selinux/config /etc/selinux/
+
 
      - name: Copy haproxy config 
        command: mv /etc/haproxy/haproxy.cfg /vagrant/cfg/haproxy.back
