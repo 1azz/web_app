@@ -56,7 +56,7 @@ ENV['VAGRANT_NO_PARALLEL'] = 'yes'
       vb_app.memory = "512"
      end
      config.vm.provision "ansible" do |ansible_app|
-         ansible_app.playbook = "bal.yaml"
+         ansible_app.playbook = "balance.yaml"
       ansible_app.compatibility_mode = "2.0"
      end
   end
