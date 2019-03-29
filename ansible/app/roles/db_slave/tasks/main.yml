@@ -1,0 +1,17 @@
+---
+# This playbook will install MariaDB and create db user and give permissions.
+- name: install the postgresql rpm repo
+  yum:
+    name: https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm
+    state: present
+
+- name: Install postgresql package
+  yum:
+    name:
+    - postgresql96-server
+    - python-psycopg2
+    state: installed
+
+
+- include: initialize_slave.yml
+

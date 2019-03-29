@@ -1,0 +1,11 @@
+- name: restart nginx
+  service: name=nginx daemon_reload=yes state=restarted enabled=yes
+
+- name: start nginx
+  service: name=nginx daemon_reload=yes state=started enabled=yes
+
+- name: restart UWSGI
+  service: name=uwsgi daemon_reload=yes state=restarted enabled=yes
+
+- name: start UWSGI
+  service: name=uwsgi daemon_reload=yes state=started enabled=yes

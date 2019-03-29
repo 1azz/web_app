@@ -1,0 +1,65 @@
+---
+# These tasks are responsible for copying the latest dev/production code from
+# the version control system.
+
+#- name: Copy the code from repository
+#  git: repo={{ repository }} dest=/var/www/html/
+
+#- name: Creates the index.php file
+#  template: src=index.php.j2 dest=/var/www/index.php
+
+#- name: Create php.ini
+#  template: src=php.ini.j2 dest=/etc/php.ini
+#
+#- name: Creates the php-fpm.conf file
+#  template: src=php-fpm.cfg.j2 dest=/etc/php-fpm.conf
+#
+#- name: Creates the www.conf file
+#  template: src=www.conf.j2 dest=/etc/php-fpm.d/www.conf
+#  notify: restart php-fpm
+#
+  
+- name: copy php.ini
+  copy:
+    src: templates/php.ini.j2
+    dest: /etc/php.ini
+    owner: nginx
+    group: nginx
+
+- name: copy php-fpm.cfg
+  copy:
+    src: templates/php-fpm.cfg.j2
+    dest: /etc/php-fpm.conf
+    owner: nginx
+    group: nginx
+
+- name: copy www.conf
+  copy:
+    src: templates/www.conf.j2
+    dest: /etc/php-fpm.d/www.conf
+    owner: nginx
+    group: nginx
+
+- name: copy nginx.conf
+  copy:
+    src: templates/nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    owner: nginx
+    group: nginx
+
+- name: copy nginx default.conf
+  copy:
+    src: templates/default.conf.j2
+    dest: /etc/nginx/conf.d/default.conf
+    owner: nginx
+    group: nginx
+
+- name: reload service nginx
+  systemd:
+    name: nginx
+    state: reloaded
+
+- name: reload service php-fpm
+  systemd:
+    name: php-fpm
+    state: reloaded

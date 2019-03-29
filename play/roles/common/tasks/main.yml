@@ -1,0 +1,46 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+- name: RAW install python 
+  raw: yum -y install python
+
+- name: Install epel
+  yum:
+    name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    state: present
+- rpm_key:
+    state: present
+    key: https://getfedora.org/static/352C64E5.txt
+
+- name: install the Remin rpm repo
+  yum:
+    name: http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+    state: present
+
+- rpm_key:
+    state: present
+    key: https://rpms.remirepo.net/RPM-GPG-KEY-remi2018
+
+- name: Configure remi repo file
+  template: src=remi-php72.repo.j2 dest=/etc/yum.repos.d/remi-php72.repo
+  tags: yum_repository
+
+- name: Install ntp
+  yum: name=ntp state=present
+  tags: ntp
+
+- name: Install common dependencies
+  yum: name={{ item }} state=installed
+  with_items:
+   - libselinux-python
+   - libsemanage-python
+   - firewalld
+   - open-vm-tools
+
+- name: Configure ntp file
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  tags: ntp
+  notify: restart ntp
+
+- name: Start the ntp service
+  service: name=ntpd state=started enabled=yes
+  tags: ntp

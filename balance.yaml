@@ -1,0 +1,33 @@
+---
+- hosts: bal
+  become: yes
+  tasks:
+     - name: Disable SELinux 
+       lineinfile:
+         path: /etc/selinux/config
+         regexp: '^SELINUX='
+         line: 'SELINUX=disabled'
+# These tasks install http and the php modules.
+     - name: Install EPEL meta package
+       yum:
+         name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+         state: present
+     
+     - name: haproxy requirements
+       yum: 
+        name:
+         - libselinux-python
+         - haproxy
+        state: present
+
+     - name: Disable SELinux 
+       selinux:
+        state: disabled
+        #- command: cp -f /vagrant/selinux/config /etc/selinux/
+
+     - name: Copy haproxy config 
+       command: mv /etc/haproxy/haproxy.cfg /vagrant/cfg/haproxy.back
+     - command: cp -f /vagrant/cfg/haproxy.cfg /etc/haproxy/
+     
+     - name: Start and enable haproxy
+       service: name=haproxy state=started enabled=yes

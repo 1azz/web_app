@@ -1,0 +1,27 @@
+---
+# This playbook deploys the whole application stack in this site.
+
+- name: apply common configuration to all nodes
+  hosts: all
+  become: yes
+  roles:
+    - common
+
+- name: configure and deploy the webservers and application code
+  hosts: webservers
+  become: yes
+  roles:
+    - web
+
+- name: configure and install database
+  hosts: db
+  become: yes
+  roles:
+    - db
+
+- name: postinstall
+  hosts: all
+  remote_user: azz
+  become: yes
+  roles:
+    - postinstall

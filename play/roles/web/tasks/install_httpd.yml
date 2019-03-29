@@ -1,0 +1,52 @@
+---
+# These tasks install http and the php modules.
+
+- name: Add repository
+  yum_repository:
+    name: nginx
+    description: nginx YUM repo
+    file: nginx.repo
+    baseurl: http://nginx.org/packages/centos/7/$basearch/
+    gpgcheck: no
+
+- name: Install httpd and php
+  yum: name={{ item }} state=present
+  with_items:
+   - nginx
+   - php72-php
+   - php72-php-fpm
+   - php-fpm
+   - php72-php-pgsql
+   - php72-php-bcmath
+   - php72-php-mbstring
+   - php72-php-gd
+   - php72-php-xml
+   - php72-php-ldap
+   - php72-php-snmp
+
+
+- name: Start and enable nginx
+  service: name=nginx state=started enabled=yes
+
+- name: Start and enable php-fpm
+  service: name=php-fpm state=started enabled=yes
+
+
+
+#
+#- name: Install web role specific dependencies
+#  yum: name={{ item }} state=installed
+#  with_items:
+#   - git
+#
+- name: Start firewalld
+  service: name=firewalld state=started enabled=yes
+
+- name: insert firewalld rule for httpd
+  firewalld: port=80/tcp permanent=true state=enabled immediate=yes
+#
+#- name: http service state
+#  service: name=httpd state=started enabled=yes
+#
+#- name: Configure SELinux to allow httpd to connect to remote database
+#  seboolean: name=httpd_can_network_connect_db state=true persistent=yes

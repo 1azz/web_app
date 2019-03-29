@@ -1,0 +1,11 @@
+- name: install haproxy and requirements
+  yum: 
+   name:
+     - libselinux-python
+     - haproxy
+   state: latest
+
+- name: Copy haproxy config 
+  command: mv /etc/haproxy/haproxy.cfg /vagrant/cfg/haproxy.back
+- command: cp -f /vagrant/cfg/haproxy.cfg /etc/haproxy/
+  notify: start haproxy

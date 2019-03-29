@@ -1,0 +1,20 @@
+---
+- git:
+   repo: "{{ repository }}"
+   dest: /opt/app
+- name: Configuring APP  
+  lineinfile:
+    path: /opt/app/app/config.py
+    regexp: 'postgresql://worker:worker@localhost/app'
+    line: "    SQLALCHEMY_DATABASE_URI='postgresql://app_user:app_password@192.168.0.100/app'"
+
+- name: Install requirements
+  pip: 
+   requirements: /opt/app/app/requirements.txt
+   virtualenv: /opt/app/venv
+   virtualenv_python: python3.6
+
+- name: Make DB migrtion
+  shell: "cd /opt/app && source venv/bin/activate && cd app/ && FLASK_APP=app.py flask db upgrade"
+  notify: start uwsgi
+

@@ -1,0 +1,11 @@
+[db_master]
+db
+[db_slave]
+db1
+
+[app]
+app
+app1
+
+[bal]
+bal

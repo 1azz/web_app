@@ -1,0 +1,24 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+- name: make nginx chache directory
+  shell: |
+   mkdir -p  {{ item }}
+  args:
+     executable: /bin/bash
+  with_items:
+    - /var/cache/nginx
+
+
+- name: recursive chown 
+  shell: |
+   chown -R nginx:nginx {{ item }}
+  args:
+     executable: /bin/bash
+  with_items:
+    - /var/www/zabbix/
+    - /var/cache/nginx/
+    - /var/www/
+    - /var/lib/php/wsdlcache/
+    - /var/lib/php/opcache/
+    - /var/lib/php/session/
+    - /var/run/php-fpm/

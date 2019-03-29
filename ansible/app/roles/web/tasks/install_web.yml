@@ -1,0 +1,63 @@
+---
+- name: Add NGINX repository
+  yum_repository:
+    name: nginx
+    description: nginx YUM repo
+    file: nginx
+    baseurl: http://nginx.org/packages/centos/7/$basearch/
+    gpgcheck: yes
+    gpgkey: https://nginx.org/keys/nginx_signing.key
+
+- name: Install nginx, python36 and other requirements
+  yum: 
+   name:
+     - libselinux-python
+     - gcc
+     - python36-devel
+     - git
+     - nginx
+     - python36
+     - python36-pip
+     - python-setuptools
+     - python-virtualenv
+#     - uwsgi 
+     - uwsgi-plugin-python36
+   state: present
+
+- name: Copy nginx config 
+  command: cp -f /vagrant/cfg/default.conf /etc/nginx/conf.d
+- command: cp -f /vagrant/cfg/nginx.conf /etc/nginx
+
+- name: Copy UWSGI config 
+  command: cp /vagrant/cfg/uwsgi_app.ini /etc/uwsgi.d/
+
+- name: Setting UWSGI config files attributes
+  file:
+     path: /etc/uwsgi.d/
+     owner: uwsgi
+     group: uwsgi
+     mode: 01751
+     recurse: yes
+
+- name: Setting NGINX config files attributes
+  file:
+     path: /etc/nginx
+     owner: nginx
+     group: nginx
+     mode: 751
+     recurse: yes
+  notify: start nginx
+
+- name: Add user nginx to uwsgi group
+  user:
+   name: nginx
+   groups: uwsgi
+
+- file:
+    path: /run/uwsgi
+    owner: uwsgi
+    group: nginx
+    mode: 0777
+    recurse: yes
+
+

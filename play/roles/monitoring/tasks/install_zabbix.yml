@@ -1,0 +1,106 @@
+---
+# These tasks install http and the php modules.
+#- name: install the zabbix 3.2 rpm repo
+#  yum:
+#    name: http://repo.zabbix.com/zabbix/3.2/rhel/7/x86_64/zabbix-release-3.2-1.el7.noarch.rpm
+#    state: present
+
+
+
+- name: install the zabbix 3.2 rpm repo
+  yum:
+    name: https://repo.zabbix.com/zabbix/3.2/rhel/7/x86_64/zabbix-release-3.2-1.el7.noarch.rpm
+    state: present
+  notify: upgrade all packages
+
+- name: Install Zabbix 
+  yum: name={{ item }} state=present
+  with_items:
+   - zabbix-release
+   - zabbix-server-pgsql
+   - zabbix-agent
+   - zabbix-web
+   - libcurl
+   - net-snmp
+   - fping
+   - iksemel
+   - libxml2
+   - net-snmp
+   - net-snmp-utils
+
+- name: Start and enable zabbix-server
+  service: name=zabbix-server state=started enabled=yes
+
+- name: Start and enable zabbix-agent
+  service: name=zabbix-agent state=started enabled=yes
+
+- name: Creates zabbix config
+  template: src=index.php.j2 dest=/var/www/index.php
+
+- name: make symlink
+  file:
+    path: "/var/www/zabbix"
+    src: "/usr/share/zabbix/"
+    state: link
+
+- name: set atributes
+  file:
+   path: "/etc/zabbix"
+   owner: zabbix
+   group: nginx
+   state: directory 
+   recurse: yes
+
+- name: recursive chown 
+  shell: |
+   chown -R nginx:nginx {{ item }}
+  args:
+     executable: /bin/bash
+  with_items:
+    - /etc/zabbix
+   
+- name: create postgresq user for zabbix
+  postgresql_user:
+#     db: zabbix
+     name: zabbix
+     password: "!_zabbix"
+     encrypted: yes
+     role_attr_flags:  SUPERUSER
+
+- name: create db for zabbix 
+  postgresql_db:
+     name: zabbix
+     encoding: UTF-8
+     lc_collate: en_US.UTF-8
+     lc_ctype: en_US.UTF-8
+     template: template0
+     owner: zabbix
+     state: present
+
+- raw: find /usr/share/doc/zabbix* -name "create*.gz" -exec gunzip -c {} > /home/azz/create.sql \;
+
+- postgresql_db:
+    name: zabbix
+    login_user: "{{ postgresql_user_zabbix }}"
+    login_password: "{{ postgresql_zabbix_password }}"
+    state: restore
+    target: /home/azz/create.sql
+
+
+#
+#- name: Install web role specific dependencies
+#  yum: name={{ item }} state=installed
+#  with_items:
+#   - git
+#
+#- name: Start firewalld
+#  service: name=firewalld state=started enabled=yes
+#
+#- name: insert firewalld rule for httpd
+#  firewalld: port={{ httpd_port }}/tcp permanent=true state=enabled immediate=yes
+#
+#- name: http service state
+#  service: name=httpd state=started enabled=yes
+#
+#- name: Configure SELinux to allow httpd to connect to remote database
+#  seboolean: name=httpd_can_network_connect_db state=true persistent=yes

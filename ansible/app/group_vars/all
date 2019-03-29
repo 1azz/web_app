@@ -1,0 +1,23 @@
+---
+# Variables listed here are applicable to all host groups
+
+httpd_port: 80
+ntpserver:  0.europe.pool.ntp.org   # не забыдь заменить на ближайший NTP
+
+repository: https://bitbucket.org/m_baranov/test-app/src/master/
+
+app_user: app
+app_password: appAPP
+app_db: app
+
+
+mgm_network: 10.30.0.0/16
+postgresql_data_dir: /var/lib/pgsql/9.6/data
+postgresql_bin_path: /usr/pgsql-9.6/bin
+postgresql_user: postgres
+postgresql_app_user: app
+postgresql_app_database: app
+postgresql_host:
+postgresql_port: 5432
+postgresql_app_password: appAPP
+

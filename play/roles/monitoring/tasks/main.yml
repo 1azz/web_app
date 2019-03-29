@@ -1,0 +1,3 @@
+---
+- include: install_zabbix.yml 
+- include: copy_code.yml
