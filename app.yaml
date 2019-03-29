@@ -7,7 +7,7 @@
          path: /etc/selinux/config
          regexp: '^SELINUX='
          line: 'SELINUX=disabled'
-# These tasks install http and the php modules.
+
 
      - name: Install EPEL meta package
        yum:
@@ -44,7 +44,7 @@
      - name: Disable SELinux 
        selinux:
         state: disabled
-        #- command: cp -f /vagrant/selinux/config /etc/selinux/
+
 
 
      - name: Copy nginx config 
@@ -62,8 +62,7 @@
          mode: 01751
          recurse: yes
 
-#     - name: copy nginx config
-#       command: cp  /vagrant/cfg/default.conf  /etc/nginx/conf.d/
+
      
      - name: Setting NGINX config files attributes
        file:
@@ -89,7 +88,7 @@
          group: uwsgi
          mode: 0770
          recurse: yes
-#         state: directory
+
 
      - file:
          path: /run/uwsgi
