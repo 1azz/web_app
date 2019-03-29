@@ -24,7 +24,7 @@ ENV['VAGRANT_NO_PARALLEL'] = 'yes'
       vb_db.memory = "2048"
      end
      config.vm.provision "ansible" do |ansible_db|
-         ansible_db.playbook = "db.yaml"
+         ansible_db.playbook = "pgsql.yaml"
       ansible_db.compatibility_mode = "2.0"
      end
   end
@@ -39,7 +39,7 @@ ENV['VAGRANT_NO_PARALLEL'] = 'yes'
       vb_db1.memory = "2048"
      end
      config.vm.provision "ansible" do |ansible_db1|
-         ansible_db1.playbook = "db1.yaml"
+         ansible_db1.playbook = "pgsql1.yaml"
       ansible_db1.compatibility_mode = "2.0"
      end
   end
