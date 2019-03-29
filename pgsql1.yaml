@@ -19,7 +19,7 @@
        command: "rm -rf /var/lib/pgsql/9.6/data/"
      - command: "mkdir /var/lib/pgsql/9.6/data"
      - command: "pg_basebackup -h 192.168.0.10 -D /var/lib/pgsql/9.6/data/ -R -P -U postgres --xlog-method=stream"
-       #    - command: "/bin/echo 'trigger_file = /var/lib/pgsql/9.6/data/trigger_file' >> /var/lib/pgsql/9.6/data/recovery.conf"
+     
      - lineinfile:
          path: /var/lib/pgsql/9.6/data/recovery.conf
          line: "trigger_file = '/var/lib/pgsql/9.6/data/trigger_file'"
