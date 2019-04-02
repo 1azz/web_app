@@ -80,7 +80,7 @@
        lineinfile:
          path: /opt/app/app/config.py
          regexp: 'postgresql://worker:worker@localhost/app'
-         line: "    SQLALCHEMY_DATABASE_URI='postgresql://app_user:app_password@192.168.0.100/app'"
+         line: "    SQLALCHEMY_DATABASE_URI='postgresql://app_user:app_password@192.168.0.10/app'"
 
      - file:
          path: /opt/app
