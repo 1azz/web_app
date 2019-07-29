@@ -53,6 +53,7 @@
 
      - name: Copy UWSGI config 
        command: cp /vagrant/cfg/uwsgi_app.ini /etc/uwsgi.d/
+       become_user: uwsgi
      
      - name: Setting UWSGI config files attributes
        file:
